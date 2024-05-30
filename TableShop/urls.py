@@ -20,5 +20,5 @@ from main.views import ProductsAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/ProductsList/', ProductsAPIView.as_view())
+    path('api/v1/Products/', ProductsAPIView.as_view())
 ]
