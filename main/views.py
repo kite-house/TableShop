@@ -14,10 +14,20 @@ class ProductsAPIView(APIView):
     def post(self, request):
         serializer = ProductsSerializer(data = request.data)
         serializer.is_valid(raise_exception=True)
-
-        new_product = Products.objects.create(
-            title = request.data['title'],
-            price = request.data['price'],
-            description = request.data['description']   
-        )
-        return Response({'post': ProductsSerializer(new_product).data})
+        serializer.save()
+        return Response({'post': serializer.data})
+    
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': 'Method Put not allowed'})
+        
+        try:
+            instance = Products.objects.get(pk=pk)
+        except:
+            return Response({'error' : 'Object does not exists'})
+        
+        serializer = ProductsSerializer(data = request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'post': serializer.data})
